@@ -1,0 +1,74 @@
+type Query {
+  transfers: [Transfer]
+  recipients: [Recipient]
+  detailTransfer(id: ID!): Transfer
+  unassignedRecipients(transferId: ID!): [Recipient]
+  paginatedRecipient(
+    page: Int
+    pageSize: Int
+    search: String
+  ): PaginatedRecipient
+  paginatedTransfer(page: Int, pageSize: Int, search: String): PaginatedTransfer
+  paginatedRecipientsInTransferDetail(
+    transferId: Int
+    page: Int
+    pageSize: Int
+    search: String
+  ): PaginatedRecipient
+}
+
+type Mutation {
+  addRecipient(recipient: AddRecipientInput!): Recipient
+  addTransfer(transfer: AddTransferInput!): Transfer
+  deleteTransfer(id: ID!): [Transfer]
+  deleteRecipientInTransfer(transferId: ID!, ids: [ID!]): Transfer
+  unassignedRecipients(transferId: ID!): [Recipient]
+  assignRecipient(ids: AssignRecipientInput!): Transfer
+}
+
+type Transfer {
+  id: ID!
+  recipients: [Recipient]
+  transfer_name: String!
+  total: Int
+  totalRecipients: Int
+}
+
+type Recipient {
+  id: ID!
+  name: String!
+  description: String!
+  discount: Int!
+  amount: Int!
+  total: Int!
+}
+
+type PaginatedRecipient {
+  page: Int
+  pageSize: Int
+  items: [Recipient]
+  hasMore: Boolean
+}
+
+type PaginatedTransfer {
+  page: Int
+  pageSize: Int
+  items: [Transfer]
+  hasMore: Boolean
+}
+
+input AddRecipientInput {
+  name: String!
+  description: String!
+  discount: Int!
+  amount: Int!
+}
+
+input AddTransferInput {
+  transfer_name: String!
+}
+
+input AssignRecipientInput {
+  transferId: Int!
+  recipientId: Int!
+}
